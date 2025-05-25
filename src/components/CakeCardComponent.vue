@@ -1,16 +1,18 @@
-export default {
-    name: 'CakeCardComponent',
-    props: {
-        cake: {
-            type: Object,
-            required: true
-        }
-    },
-    template: /* html */ `
+<script setup>
+
+defineProps({
+    cake: {
+        type: Object,
+        required: true
+    }
+});
+
+</script>
+<template>
     <div class="card">
             <div class="card-header">
-                <h2 class="card-title">{{cake.name}}</h2>
-                <p>{{cake.weight}}</p>
+                <h2 class="card-title">{{ cake.title }}</h2>
+                <p>{{ cake.weight }}</p>
             </div>
             <div class="card-body">
                 <img :src="cake.image" alt="">
@@ -22,8 +24,7 @@ export default {
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                       </svg>                      
                 </div>
-                <h2>{{cake.price}}</h2>
+                <h2>${{ cake.price }}</h2>
             </div>
         </div>
-    `
-}
+</template>
