@@ -20,6 +20,7 @@ header {
 .size-6 {
     width: 3rem;
     height: 3rem;
+    color: black;
 }
 
 .logo {
@@ -35,11 +36,16 @@ header {
     align-items: center;
     background-color: #f5f3f3;
 }
+
 a {
     text-decoration: none;
     color: #585858;
     font-size: 1.5em;
     font-weight: 500;
+}
+
+a svg {
+    /* cursor: pointer; */
 }
 
 main {

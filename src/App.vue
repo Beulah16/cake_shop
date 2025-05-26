@@ -1,11 +1,15 @@
-<script setup lang="ts">
-import CakeListComponent from './components/cakeListComponent.vue';
-import HeaderComponent from './components/headerComponent.vue';
+<script setup >
+import CartComponent from '@/components/CartComponent.vue';
+
+import CakeListComponent from '@/components/CakeListComponent.vue';
+import HeaderComponent from '@/components/HeaderComponent.vue';
 
 </script>
 
 <template>
+  
   <HeaderComponent />
-  <CakeListComponent />
+  <!-- <CakeListComponent /> -->
+  <CartComponent />
 </template>
 
