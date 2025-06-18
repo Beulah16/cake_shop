@@ -9,13 +9,25 @@
     margin: 0 auto;
 }
 
- .cart-header {
+.cart-wrapper {
+    position: relative;
+}
 
- }
-
- .cart-body {
-
- }
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    background-color: red;    
+}
 
 .item-details {
     width: 60%;
