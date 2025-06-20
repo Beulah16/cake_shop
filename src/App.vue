@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import CartModal from '@/components/CartModal.vue';
 import CakeListComponent from '@/components/CakeListComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
@@ -58,5 +58,5 @@ const totalPrice = computed(calculateTotalPrice)
 
   </LayoutComponent>
 
-  <CartModal :open="isOpen" @close="closeModal" />
+  <CartModal :open="isOpen" @close="closeModal" :cart="cart"/>
 </template>

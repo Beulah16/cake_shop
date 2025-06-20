@@ -1,4 +1,4 @@
-* {
+/* * {
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
@@ -15,12 +15,13 @@
 
 .cart-count {
     position: absolute;
-    top: -10px;
-    right: -12px;
+    top: -20px;
+    right: -15px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 30px;
+    padding: 20px;
     height: 30px;
     border-radius: 50%;
     font-size: 15px;
@@ -126,4 +127,4 @@
 
 .add-item {
     margin-top: 20px;
-}
+} */

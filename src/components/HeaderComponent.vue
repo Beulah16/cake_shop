@@ -40,3 +40,26 @@ defineProps({
         </nav>
     </header>
 </template>
+
+<style scoped>
+.cart-wrapper {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -20px;
+    right: -15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    padding: 20px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+    background-color: red;    
+}
+</style>
