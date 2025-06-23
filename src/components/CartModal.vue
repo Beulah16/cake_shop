@@ -1,20 +1,20 @@
 <script setup>
 import { computed } from 'vue'
+import EmptyCart from '@/assets/empty-cart.svg'
 
 
 const props = defineProps({
     open: Boolean,
     cart: Array
 })
-
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'increment', 'decrement', 'removeItem'])
 
 function calculateItemTotalPrice(item) {
     return (item.quantity * item.price).toFixed(2)
 }
 
 function calculateCartTotalPrice() {
-    return props.cart.reduce((acc, item) => acc+= (item.quantity * item.price), 0).toFixed(2)
+    return props.cart.reduce((acc, item) => acc += (item.quantity * item.price), 0).toFixed(2)
 }
 
 const cartTotalPrice = computed(calculateCartTotalPrice);
@@ -28,30 +28,43 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
                 <!-- <button @click="emit('close')">Close</button> -->
                 <div class="cart">
                     <div class="cart-item-wrapper">
-                        <div class="cart-item" v-for="item in cart" :key="item.id">
-                            <div class="item-image">
-                                <img :src="item.image" alt="" class="dp">
-                            </div>
-                            <div class="item-title">{{ item.title }}</div>
-                            <div class="item-qnty">
-                                <div class="decrement">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
-                                    </svg>
+                        <template v-if="cart.length">
+                            <div class="cart-item" v-for="item in cart" :key="item.id">
+                                <div class="item-image">
+                                    <img :src="item.image" alt="" class="dp">
                                 </div>
-                                <div class="quantity">{{ item.quantity }}</div>
-                                <div class="increment">
+                                <div class="item-title">{{ item.title }}</div>
+                                <div class="item-qnty">
+                                    <button type="button" class="decrement" @click="emit('decrement', item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                                        </svg>
+                                    </button>
+                                    <div class="quantity">{{ item.quantity }}</div>
+                                    <button type="button" class="increment" @click="emit('increment', item)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="item-price">${{ item.price.toFixed(2) }}</div>
+                                <div class="item-ttl-prc">${{ calculateItemTotalPrice(item) }}</div>
+                                <button class="remove-item" @click="emit('removeItem', item.id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="size-2">
+                                        stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 4.5v15m7.5-7.5h-15" />
+                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                     </svg>
-                                </div>
+
+                                </button>
                             </div>
-                            <div class="item-price">${{ item.price.toFixed(2) }}</div>
-                            <div class="item-ttl-prc">${{ calculateItemTotalPrice(item) }}</div>
-                            <div class="remove-item">X</div>
+                        </template>
+                        <div v-else class="empty-cart">
+                            <img :src="EmptyCart" alt="">
+                            <h3>Add items to your cart</h3>
                         </div>
                     </div>
                     <div class="cart-summary">
@@ -101,11 +114,33 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
 </template>
 
 <style scoped>
+.increment,
+.decrement,
+.remove-item {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+.empty-cart{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    margin: auto;
+}
+
+.empty-cart img {
+    width: 100%;
+
+}
+
 h3 {
     font-weight: 300;
 }
+
 .payment-opts {
     display: flex;
     justify-content: space-between;

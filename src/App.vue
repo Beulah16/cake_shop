@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import CartModal from '@/components/CartModal.vue';
 import CakeListComponent from '@/components/CakeListComponent.vue';
 import HeaderComponent from '@/components/HeaderComponent.vue';
@@ -31,17 +31,30 @@ function addItemToCart(item) {
   cart.value.push(item);
 }
 
+function removeItemFromCart(itemId){
+  cart.value = cart.value.filter(item => item.id !== itemId)
+}
+
 function calculateTotalItem() {
   return cart.value.reduce((acc, value) => acc += value.quantity, 0)
 }
 
 function calculateTotalPrice() {
   return cart.value.reduce(
-    (acc, value) => acc += (value.quantity * value.price), 
+    (acc, value) => acc += (value.quantity * value.price),
     0).toFixed(2)
 }
 const itemCount = computed(calculateTotalItem)
 const totalPrice = computed(calculateTotalPrice)
+
+function increaseItemQnty(item) {
+  item.quantity++
+}
+
+function decreaseItemQnty(item) {
+  if(item.quantity === 0) return;
+  item.quantity--
+}
 
 </script>
 
@@ -58,5 +71,5 @@ const totalPrice = computed(calculateTotalPrice)
 
   </LayoutComponent>
 
-  <CartModal :open="isOpen" @close="closeModal" :cart="cart"/>
+  <CartModal :open="isOpen" @close="closeModal" :cart="cart" @increment="increaseItemQnty" @decrement="decreaseItemQnty" @remove-item="removeItemFromCart"/>
 </template>
