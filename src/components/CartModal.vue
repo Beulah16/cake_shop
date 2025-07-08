@@ -1,23 +1,15 @@
 <script setup>
 import { computed } from 'vue'
 import EmptyCart from '@/assets/empty-cart.svg'
+import { useCart } from '@/composables/useCart.js'
 
+const { cart, calculateItemTotalPrice, cartTotalPrice, increamentItemQnty, decreamentItemQnty, removeItemFromCart} = useCart()
 
 const props = defineProps({
     open: Boolean,
-    cart: Array
 })
-const emit = defineEmits(['close', 'increment', 'decrement', 'removeItem'])
 
-function calculateItemTotalPrice(item) {
-    return (item.quantity * item.price).toFixed(2)
-}
-
-function calculateCartTotalPrice() {
-    return props.cart.reduce((acc, item) => acc += (item.quantity * item.price), 0).toFixed(2)
-}
-
-const cartTotalPrice = computed(calculateCartTotalPrice);
+const emit = defineEmits(['close'])
 
 </script>
 
@@ -25,7 +17,6 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
     <Teleport to="body">
         <div class="modal" v-if="open" @click.self="emit('close')">
             <div class="modal-content">
-                <!-- <button @click="emit('close')">Close</button> -->
                 <div class="cart">
                     <div class="cart-item-wrapper">
                         <template v-if="cart.length">
@@ -35,14 +26,14 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
                                 </div>
                                 <div class="item-title">{{ item.title }}</div>
                                 <div class="item-qnty">
-                                    <button type="button" class="decrement" @click="emit('decrement', item)">
+                                    <button type="button" class="decrement" @click="decreamentItemQnty(item)">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-2">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                                         </svg>
                                     </button>
                                     <div class="quantity">{{ item.quantity }}</div>
-                                    <button type="button" class="increment" @click="emit('increment', item)">
+                                    <button type="button" class="increment" @click="increamentItemQnty(item)">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,7 +43,7 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
                                 </div>
                                 <div class="item-price">${{ item.price.toFixed(2) }}</div>
                                 <div class="item-ttl-prc">${{ calculateItemTotalPrice(item) }}</div>
-                                <button class="remove-item" @click="emit('removeItem', item.id)">
+                                <button class="remove-item" @click="removeItemFromCart(item.id)">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="size-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -122,7 +113,7 @@ const cartTotalPrice = computed(calculateCartTotalPrice);
     background: none;
 }
 
-.empty-cart{
+.empty-cart {
     display: flex;
     flex-direction: column;
     gap: 20px;

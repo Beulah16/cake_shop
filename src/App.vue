@@ -1,75 +1,27 @@
 <script setup>
 import CartModal from '@/components/CartModal.vue';
-import CakeListComponent from '@/components/CakeListComponent.vue';
-import HeaderComponent from '@/components/HeaderComponent.vue';
-import LayoutComponent from '@/components/LayoutComponent.vue';
-import { v4 as uuidv4 } from 'uuid';
-import { ref, computed } from 'vue'
+import CakeCard from '@/components/CakeCard.vue';
+import Header from '@/components/Header.vue';
+import Layout from '@/components/Layout.vue';
 import { cakes } from '@/cakes.json'
+import { useModal } from '@/composables/useModal.js'
 
-const isOpen = ref(false)
-
-function openModal() {
-  isOpen.value = true;
-}
-
-function closeModal() {
-  isOpen.value = false;
-}
-
-const cart = ref([])
-
-function addItemToCart(item) {
-  if (item.id) {
-    const itemFound = cart.value.find((cartItem) => cartItem.id === item.id)
-    itemFound.quantity++;
-    return;
-  }
-
-  item.id = uuidv4();
-  item.quantity = 1;
-  cart.value.push(item);
-}
-
-function removeItemFromCart(itemId){
-  cart.value = cart.value.filter(item => item.id !== itemId)
-}
-
-function calculateTotalItem() {
-  return cart.value.reduce((acc, value) => acc += value.quantity, 0)
-}
-
-function calculateTotalPrice() {
-  return cart.value.reduce(
-    (acc, value) => acc += (value.quantity * value.price),
-    0).toFixed(2)
-}
-const itemCount = computed(calculateTotalItem)
-const totalPrice = computed(calculateTotalPrice)
-
-function increaseItemQnty(item) {
-  item.quantity++
-}
-
-function decreaseItemQnty(item) {
-  if(item.quantity === 0) return;
-  item.quantity--
-}
+const { isOpen, openModal, closeModal } = useModal()
 
 </script>
 
 <template>
 
-  <LayoutComponent>
+  <Layout>
     <template #header>
-      <HeaderComponent @open-Modal="openModal" :item-count="itemCount" />
+      <Header @open-Modal="openModal" />
     </template>
 
-    <template #main>
-      <CakeListComponent :cakes="cakes" @add-to-cart="addItemToCart" />
+    <template #content>
+      <CakeCard v-for="(cake, index) in cakes" :key="index" :cake="cake" />
     </template>
 
-  </LayoutComponent>
+  </Layout>
 
-  <CartModal :open="isOpen" @close="closeModal" :cart="cart" @increment="increaseItemQnty" @decrement="decreaseItemQnty" @remove-item="removeItemFromCart"/>
+  <CartModal :open="isOpen" @close="closeModal" />
 </template>
